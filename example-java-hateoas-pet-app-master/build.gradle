@@ -1,0 +1,63 @@
+
+plugins {
+    id 'jacoco'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+
+pmd {
+    ignoreFailures = false
+	sourceSets = [sourceSets.main]
+    ruleSetFiles = files("config/pmd/ruleset.xml")
+}
+
+jar {
+    baseName = 'pet-me'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://repo.spring.io/libs-release" }
+}
+
+dependencies {
+    compile("org.springframework.data:spring-data-mongodb:1.10.0.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-web:1.5.1.RELEASE")
+    compile("org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE")
+    compile("com.google.guava:guava:21.0")
+    compile("org.projectlombok:lombok:1.16.14")
+    testCompile("junit:junit:4.12")
+    testCompile("org.mockito:mockito-all:1.10.19")
+    testCompile("org.springframework.boot:spring-boot-starter-test:1.5.1.RELEASE")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+test {
+    jacoco {
+        append = false
+        destinationFile = file("$buildDir/jacoco/jacocoTest.exec")
+        classDumpFile = file("$buildDir/jacoco/classpathdumps")
+    }
+}
