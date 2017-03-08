@@ -79,7 +79,7 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/{animalid}", method = RequestMethod.GET, produces = "application/json")
-    public @ResponseBody ResponseEntity<AnimalResource> u(
+    public @ResponseBody ResponseEntity<AnimalResource> update(
             @RequestBody final AnimalDTO animalDTO) {
         final AnimalDTO animalResource = animalService.update(animalDTO);
         final AnimalResource resource = resourceAssembler
